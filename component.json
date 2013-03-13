@@ -1,0 +1,16 @@
+{
+  "name": "form-validator",
+  "version": "0.0.1",
+  "description": "Easily add validation to form elements using data attributes or manually create a schema",
+  "scripts": [
+    "index.js",
+    "errors.js",
+    "methods.js",
+    "validator.js"
+  ],
+  "dependencies": {
+    "visionmedia/debug": "*",
+    "nib-components/tip": "0.0.*",
+    "nib-components/attributes": "0.0.*"
+  }
+}
