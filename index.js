@@ -15,7 +15,7 @@ var debug = require('debug')('FormValidator');
  * used for validation. The 3rd part of the data
  * attribute should be a method defined in the methods
  * module. eg. data-validates-number="true"
- * 
+ *
  * @param {Object} options
  */
 function FormValidator(options){
@@ -30,7 +30,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Bind to the submit and cancel events on the form
-   * 
+   *
    * @return {[type]} [description]
    */
   bindEvents: function() {
@@ -40,7 +40,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Get the rules from the data attribute of the fields
-   * 
+   *
    * @return {Object} The rules object used by the validator
    */
   getRules: function() {
@@ -53,7 +53,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Get the rules for a single element. Uses data attributes
    * to determine the rules.
-   * 
+   *
    * @param  {Number}   index   Index in the node list
    * @param  {Element}  el     Element with data attributes. Could be a control or a div
    * @return {void}
@@ -72,7 +72,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Get the validation message for each element
-   * 
+   *
    * @return {Object}
    */
   getMessages: function(){
@@ -85,7 +85,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Get the validation message for the element with the data-validates-*
    * attribute. Each element can only have one validation message for now.
-   * 
+   *
    * @param  {Number}   index   Index in the node list
    * @param  {Element}  el      Element with validation
    * @return {Object}           Hash of messages with the field name as the key
@@ -99,7 +99,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Validate an object of data against the validation rules for this form
-   * 
+   *
    * @param  {Object}   data    Data to validate. Usually an object representing form values
    * @return {Errors}
    */
@@ -123,7 +123,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
    * should be represented. The name of the field is the key
    * and the value of the field is the object value. This
    * is sent to the validator
-   * 
+   *
    * @return {Object} Key/Value representation of the form
    */
   toJSON: function(){
@@ -161,7 +161,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Get the validation group. Groups are defined by using the data
    * attribute with a value equal to the field name they are validating.
-   * 
+   *
    * @param  {String}   name    Field name
    * @return {jQuery}           Returns false if no element is found
    */
@@ -173,9 +173,9 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Returns an array of all of the field elements in the
-   * form. All of these fields are the ones which will be 
+   * form. All of these fields are the ones which will be
    * considered when validating and serializing to JSON.
-   * 
+   *
    * @return {Array} jQuery Object
    */
   fields: function(){
@@ -184,7 +184,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Return a list of all of the validation groups
-   * 
+   *
    * @return {Array} jQuery object
    */
   groups: function(){
@@ -192,9 +192,9 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   },
 
   /**
-   * Submit the form, validating it first and 
+   * Submit the form, validating it first and
    * halting the submission if the form is not valid
-   * 
+   *
    * @param  {Event} event Submit event
    * @return {void}
    */
@@ -225,7 +225,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Event handler for the submit action
-   * 
+   *
    * @param  {Event} event
    * @return {void}
    */
@@ -236,10 +236,10 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Event handler for the cancel on the form. Not all
    * forms have a cancel button but they are used in models.
-   * Simply emits an event so that parent views can listen 
+   * Simply emits an event so that parent views can listen
    * for a cancel and destroy the form
-   * 
-   * @param  {Event} event 
+   *
+   * @param  {Event} event
    * @return {void}
    */
   _onCancel: function(event) {
@@ -250,7 +250,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Takes an Errors object and shows all of the errors
    * in the form.
-   * 
+   *
    * @param  {Errors} errors Errors object usually created by the validate method
    * @return {void}
    */
@@ -271,7 +271,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Get all of the related fields for a field. These fields
    * will also be validated when the original field is validated
-   * 
+   *
    * @param  {String} name field name
    * @return {Array}      Array of field names
    */
@@ -284,7 +284,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Get all of the data for a single field needed to validate
    * it, including any data of related fields
-   * 
+   *
    * @param  {String} name field name
    * @return {Object}
    */
@@ -301,10 +301,10 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Show a single error message
-   * 
+   *
    * @param  {String} name    Name attribute of the invalid field
    * @param  {String} message The message to show
-   * @param  {Element} el     The DOM element of the invalid field 
+   * @param  {Element} el     The DOM element of the invalid field
    * @return {void}
    */
   showError: function(name, message, el){
@@ -324,8 +324,9 @@ _.extend(FormValidator.prototype, Backbone.Events, {
     var error = new Tip({
       target: el,
       content: message,
-      position: 'east',
-      width: 200
+      position: el.attr('data-message-position') || 'east',
+      align: el.attr('data-message-align') || 'left',
+      width: el.attr('data-message-width') || 200
     });
 
     error.show();
@@ -335,7 +336,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Added events for when the fields changes to revalidate itself
    * and its related fields. This is removed when the field becomes valid
-   * 
+   *
    * @param  {String} name field name
    * @return {void}
    */
@@ -355,7 +356,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
 
   /**
    * Remove an error for a field.
-   * 
+   *
    * @param  {String} name The field name with the error to remove
    * @return {void}
    */
@@ -374,17 +375,19 @@ _.extend(FormValidator.prototype, Backbone.Events, {
   /**
    * Remove all error messages from the form and
    * destroy the form
-   * 
+   *
    * @return {void}
    */
   remove: function(){
     this.trigger('remove');
-    _(this._errorMessages).each(function(tip){
-      tip.hide();
-    });
+    _(this._errorMessages).each(function(tip, name){
+      this.removeError(name);
+    }, this);
     this._errorMessages = null;
+    this.off();
+    this.el.off();
   }
-  
+
 });
 
 /**
@@ -392,7 +395,7 @@ _.extend(FormValidator.prototype, Backbone.Events, {
  * on all selectors. This is used at a global scope
  * on the page to create validators without needing
  * views for each form
- * 
+ *
  * @param  {Object} options
  */
 FormValidator.create = function(options) {
