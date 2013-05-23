@@ -1,6 +1,6 @@
 {
   "name": "form-validator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Easily add validation to form elements using data attributes or manually create a schema",
   "scripts": [
     "index.js",
