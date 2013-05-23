@@ -255,17 +255,16 @@ _.extend(FormValidator.prototype, Backbone.Events, {
    * @return {void}
    */
   showErrors: function(errors) {
-    var messages = this.messages;
-    var self = this;
-    errors.each(function(types, attr){
-      var message = _.result(messages, attr);
-      var field = self.group(attr) || self.field(attr);
-      if( !field ) {
-        throw new Error("No element for field: " + attr);
-      }
-      debug("Showing error for %s, %s, %s", attr, message, field);
-      self.showError(attr, message, field);
-    });
+    errors.each(this._showError.bind(this));
+  },
+
+  _showError: function(errorNames, attr){
+    var message = this.messages[attr];
+    var field = this.group(attr) || this.field(attr);
+    if( !field ) {
+      throw new Error("No element for field: " + attr);
+    }
+    this.showError(attr, message, field, errorNames);
   },
 
   /**
@@ -307,10 +306,16 @@ _.extend(FormValidator.prototype, Backbone.Events, {
    * @param  {Element} el     The DOM element of the invalid field
    * @return {void}
    */
-  showError: function(name, message, el){
-    // There is an error message for this field
-    // already visible, don't need to do anything
-    if( this._errorMessages[name] ) return;
+  showError: function(name, message, el, error){
+
+    if(typeof message !== "string") {
+      message = message[error[0]];
+    }
+
+    // Update the error message
+    if( this._errorMessages[name] ) {
+      return this._errorMessages[name].setContent(message);
+    }
 
     var self = this;
     el.addClass('is-invalid');
@@ -349,6 +354,9 @@ _.extend(FormValidator.prototype, Backbone.Events, {
       for(var key in data) {
         if( errors.get(key) === false ) {
           self.removeError(key);
+        }
+        else {
+          self._showError(errors.get(key), key);
         }
       }
     });

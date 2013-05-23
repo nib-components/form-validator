@@ -20,7 +20,7 @@ var patterns = {
  * Simple required method. We add this as a validation
  * method so that we don't have to do anything special
  * to check for required fields in the validator
- * @param  {String} val 
+ * @param  {String} val
  * @return {Boolean}
  */
 exports.required = function(val) {
@@ -29,7 +29,7 @@ exports.required = function(val) {
 
 /**
  * Check to see if the value submit matches to required value
- * @param  {String} val       
+ * @param  {String} val
  * @param  {String} ruleValue Value from the form submit
  * @return {Boolean}
  */
@@ -43,29 +43,45 @@ exports.equals = function(val, ruleValue) {
  * @return {Boolean}
  */
 exports.username = function(val) {
-  if( !val ) return false;
-  if(val.indexOf('@') === -1) {
-    return exports.number(val);
-  }
-  else {
-    return exports.email(val);
+  if( val ) {
+    if(val.indexOf('@') === -1) {
+      return exports.number(val);
+    }
+    else {
+      return exports.email(val);
+    }
   }
 };
 
 /**
- * Simple date format checker. Most of the forms 
+ * Simple date format checker. Most of the forms
  * on the site use this style for dates.
  * @param  {String} val
  * @return {Boolean}
  */
 exports.dateofbirth = function(val) {
-  if( !val ) return false;
-  return patterns.dateofbirth.test(val) && moment(val, 'DD/MM/YYYY').isValid();
+  if(val) {
+    return patterns.dateofbirth.test(val) && moment(val, 'DD/MM/YYYY').isValid();
+  }
 };
 
 /**
+ * Simple date format checker. Most of the forms
+ * on the site use this style for dates.
+ * @param  {String} val
+ * @return {Boolean}
+ */
+exports.over16 = function(val) {
+  if(val) {
+    var birthYear = moment(val, 'DD/MM/YYYY');
+    return moment().diff(birthYear, 'years', true) >= 16;
+  }
+};
+
+
+/**
  * Check if a string is an email address
- * @param  {String}   val 
+ * @param  {String}   val
  * @return {Boolean}
  */
 exports.email = function(val) {
@@ -74,7 +90,7 @@ exports.email = function(val) {
 
 /**
  * Check if a string is a valid URL
- * @param  {String} val  
+ * @param  {String} val
  * @return {Boolean}
  */
 exports.url = function(val) {
@@ -83,7 +99,7 @@ exports.url = function(val) {
 
 /**
  * Check if a string is alphanumeric
- * @param  {String} val 
+ * @param  {String} val
  * @return {Boolean}
  */
 exports.alphanumeric = function(val) {
@@ -92,7 +108,7 @@ exports.alphanumeric = function(val) {
 
 /**
  * Check if a string is hexidecimal
- * @param  {String} val  
+ * @param  {String} val
  * @return {Boolean}
  */
 exports.hex = function(val) {
@@ -101,7 +117,7 @@ exports.hex = function(val) {
 
 /**
  * Check if the value is a string
- * @param  val 
+ * @param  val
  * @return {Boolean}
  */
 exports.string = function(val) {
