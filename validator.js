@@ -21,6 +21,15 @@ module.exports = function(attributes, schema) {
       var method = methods[type];
       var valid = false;
 
+      // Allow the rule value to be a function
+      if( !method && typeof ruleValue === 'function') {
+        valid = ruleValue(value, attributes);
+        if(valid === false) {
+          errors.add(attribute, type);
+        }
+        return;
+      }
+
       // The rule type isn't in the validation object
       // and a custom validation rule wasn't used
       if( !method ) {
