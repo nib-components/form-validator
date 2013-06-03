@@ -78,6 +78,18 @@ exports.over16 = function(val) {
   }
 };
 
+/**
+ * Make sure a person is over an age
+ * @param  {String} val
+ * @param {Number} age The age to be over
+ * @return {Boolean}
+ */
+exports.overAge = function(val, age) {
+  if(val) {
+    var birthYear = moment(val, 'DD/MM/YYYY');
+    return moment().diff(birthYear, 'years', true) >= age;
+  }
+};
 
 /**
  * Check if a string is an email address
