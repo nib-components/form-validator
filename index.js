@@ -34,8 +34,17 @@ _.extend(FormValidator.prototype, Backbone.Events, {
    * @return {[type]} [description]
    */
   bindEvents: function() {
+    this.el.on('submit', this.disableSubmit.bind(this));
     this.el.on('click', '.js-submit', this._onSubmit.bind(this));
     this.el.on('click', '.js-cancel', this._onCancel.bind(this));
+  },
+
+  /**
+   * Disable the submit button
+   * @return {void}
+   */
+  disableSubmit: function(){
+    this.el.find('[data-disable]').prop('disabled', true);
   },
 
   /**
